@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       parent: _animationController,
     ));
 
-    _rotationAnimation = Tween<double>(begin: 0, end: 0.5).animate(
+    _rotationAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         curve: Interval(
           0.5,
@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _incrementCounter() {
-    _animationController.forward().then((_) => _animationController.reverse());
+    _animationController.forward().then((_) => _animationController.reset());
     setState(() {
       _counter++;
     });
