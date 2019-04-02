@@ -26,18 +26,35 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   int _counter = 0;
   Animation<Offset> _offsetAnimation;
+  Animation<double> _rotationAnimation;
   AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+
     _offsetAnimation = Tween<Offset>(begin: Offset.zero, end: Offset(0, -1.5))
         .animate(CurvedAnimation(
-      curve: Curves.easeInOut,
+      curve: Interval(
+        0,
+        0.5,
+        curve: Curves.easeInOut,
+      ),
       parent: _animationController,
     ));
+
+    _rotationAnimation = Tween<double>(begin: 0, end: 0.5).animate(
+      CurvedAnimation(
+        curve: Interval(
+          0.5,
+          1,
+          curve: Curves.easeInOut,
+        ),
+        parent: _animationController,
+      ),
+    );
   }
 
   @override
@@ -55,30 +72,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+    return RotationTransition(
+      turns: _rotationAnimation,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-      floatingActionButton: SlideTransition(
-        position: _offsetAnimation,
-        child: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.display1,
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: SlideTransition(
+          position: _offsetAnimation,
+          child: FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: Icon(Icons.add),
+          ),
         ),
       ),
     );
